@@ -37,6 +37,22 @@ h1{
   color:var(--secondary);
 }
 
+/* CONTADOR */
+.contador{
+  display:flex;
+  justify-content:center;
+  gap:20px;
+  margin:12px 0;
+  flex-wrap:wrap;
+}
+.contador div{
+  background:#020617;
+  padding:10px 16px;
+  border-radius:10px;
+  border:1px solid rgba(59,130,246,.3);
+  font-weight:bold;
+}
+
 input,select,button{
   padding:10px;
   border-radius:8px;
@@ -106,6 +122,13 @@ td{
 <div class="container">
 <h1>Estoque de Peças de Computador</h1>
 
+<!-- CONTADOR -->
+<div class="contador">
+  <div>Total: <span id="total">0</span></div>
+  <div>Disponíveis: <span id="disponiveis">0</span></div>
+  <div>Vendidos: <span id="vendidos">0</span></div>
+</div>
+
 <div class="filtros">
   <input id="pesquisa" placeholder="Pesquisar produto" style="flex:1">
   <select id="filtroCategoria">
@@ -114,9 +137,9 @@ td{
     <option>Processador</option>
     <option>Memória RAM</option>
     <option>Gabinete</option>
-      <option>Fonte</option>
-        <option>cooler e fans </option>
-        <option>water cooler</option>
+    <option>Fonte</option>
+    <option>cooler e fans</option>
+    <option>water cooler</option>
     <option>Placa de vídeo</option>
     <option>Outros</option>
   </select>
@@ -131,10 +154,10 @@ td{
     <option>Memória RAM</option>
     <option>Armazenamento</option>
     <option>Placa de vídeo</option>
-      <option>Fonte</option>
-      <option>cooler e fans </option>
-        <option>water cooler</option>
-      <option>Gabinete</option>
+    <option>Fonte</option>
+    <option>cooler e fans</option>
+    <option>water cooler</option>
+    <option>Gabinete</option>
     <option>Outros</option>
   </select>
   <button type="submit">Adicionar</button>
@@ -180,13 +203,24 @@ const categoria = document.getElementById("categoria");
 const pesquisa = document.getElementById("pesquisa");
 const filtroCategoria = document.getElementById("filtroCategoria");
 
+const totalEl = document.getElementById("total");
+const disponiveisEl = document.getElementById("disponiveis");
+const vendidosEl = document.getElementById("vendidos");
+
 let produtos = [];
 
 // 🔥 Atualização em tempo real
 onSnapshot(collection(db,"produtos"), snap=>{
   produtos = snap.docs.map(d=>({ id:d.id, ...d.data() }));
+  atualizarContador();
   renderizar();
 });
+
+function atualizarContador(){
+  totalEl.textContent = produtos.length;
+  disponiveisEl.textContent = produtos.filter(p=>!p.vendido).length;
+  vendidosEl.textContent = produtos.filter(p=>p.vendido).length;
+}
 
 function renderizar(){
   lista.innerHTML="";
@@ -225,7 +259,6 @@ form.addEventListener("submit",async e=>{
   form.reset();
 });
 
-// ✅ FUNÇÃO CORRETA (sem erro)
 window.alterarStatus = async id => {
   const produto = produtos.find(p => p.id === id);
   if(!produto) return;
@@ -244,5 +277,3 @@ filtroCategoria.addEventListener("change",renderizar);
 
 </body>
 </html>
-
-
