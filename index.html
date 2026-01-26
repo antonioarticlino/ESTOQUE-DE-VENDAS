@@ -1,242 +1,238 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <title>Estoque de Peças de Computador</title>
+<meta charset="UTF-8">
+<title>Estoque de Peças</title>
 
-  <style>
-    :root {
-      --primary: #3b82f6;
-      --secondary: #22d3ee;
-      --text: #e5e7eb;
-      --success: #22c55e;
-      --danger: #ef4444;
-    }
+<style>
+:root {
+  --primary:#3b82f6;
+  --secondary:#22d3ee;
+  --success:#22c55e;
+  --danger:#ef4444;
+  --bg:#020617;
+  --card:#0f172a;
+  --text:#e5e7eb;
+}
 
-    body {
-      font-family: 'Segoe UI', Arial, sans-serif;
-      background: radial-gradient(circle at top, #111827, #020617);
-      margin: 0;
-      padding: 12px;
-      color: var(--text);
-    }
+body{
+  margin:0;
+  padding:12px;
+  background:radial-gradient(circle at top,#111827,#020617);
+  font-family:Segoe UI,Arial;
+  color:var(--text);
+}
 
-    h1 {
-      text-align: center;
-      color: var(--secondary);
-      margin-bottom: 10px;
-      letter-spacing: 1px;
-    }
+.container{
+  max-width:1100px;
+  margin:auto;
+  background:linear-gradient(180deg,#0f172a,#020617);
+  padding:18px;
+  border-radius:14px;
+  box-shadow:0 0 30px rgba(59,130,246,.2);
+}
 
-    .container {
-      max-width: 1100px;
-      margin: auto;
-      background: linear-gradient(180deg, #0f172a, #020617);
-      padding: 18px;
-      border-radius: 14px;
-      box-shadow: 0 0 30px rgba(59,130,246,0.15);
-      border: 1px solid rgba(59,130,246,0.2);
-    }
+h1{
+  text-align:center;
+  color:var(--secondary);
+}
 
-    input, select, button {
-      padding: 10px;
-      font-size: 14px;
-      border-radius: 8px;
-      border: 1px solid rgba(59,130,246,0.3);
-      background: #020617;
-      color: var(--text);
-    }
+input,select,button{
+  padding:10px;
+  border-radius:8px;
+  border:1px solid rgba(59,130,246,.3);
+  background:#020617;
+  color:var(--text);
+}
 
-    button {
-      cursor: pointer;
-      background: linear-gradient(135deg, var(--primary), var(--secondary));
-      color: #020617;
-      font-weight: bold;
-      border: none;
-    }
+button{
+  cursor:pointer;
+  background:linear-gradient(135deg,var(--primary),var(--secondary));
+  color:#020617;
+  font-weight:bold;
+  border:none;
+}
 
-    .filtros, form {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-      margin-bottom: 12px;
-    }
+.filtros,form{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  margin-bottom:12px;
+}
 
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 10px;
-      font-size: 14px;
-    }
+table{
+  width:100%;
+  border-collapse:collapse;
+  margin-top:10px;
+}
 
-    th {
-      background: rgba(59,130,246,0.15);
-      color: var(--secondary);
-      padding: 10px;
-    }
+th{
+  background:rgba(59,130,246,.15);
+  color:var(--secondary);
+  padding:10px;
+}
 
-    td {
-      padding: 10px;
-      border-bottom: 1px solid rgba(255,255,255,0.08);
-      text-align: center;
-    }
+td{
+  padding:10px;
+  border-bottom:1px solid rgba(255,255,255,.08);
+  text-align:center;
+}
 
-    .vendido { color: var(--danger); font-weight: bold; }
-    .nao-vendido { color: var(--success); font-weight: bold; }
+.vendido{color:var(--danger);font-weight:bold;}
+.disponivel{color:var(--success);font-weight:bold;}
 
-    .btn-remover {
-      background: linear-gradient(135deg, #ef4444, #b91c1c);
-      color: #fff;
-      margin-left: 4px;
-    }
+.btn-remover{
+  background:linear-gradient(135deg,#ef4444,#b91c1c);
+  color:#fff;
+}
 
-    @media (max-width: 600px) {
-      table, thead, tbody, th, td, tr { display: block; }
-      thead { display: none; }
-      tr {
-        background: #020617;
-        margin-bottom: 12px;
-        border-radius: 12px;
-        padding: 10px;
-      }
-      button { width: 100%; margin-top: 6px; }
-      td { text-align: left; }
-    }
-  </style>
+@media(max-width:600px){
+  table,thead,tbody,th,td,tr{display:block}
+  thead{display:none}
+  tr{
+    background:#020617;
+    margin-bottom:12px;
+    border-radius:12px;
+    padding:10px;
+  }
+  button{width:100%;margin-top:6px}
+  td{text-align:left}
+}
+</style>
 </head>
 
 <body>
 
 <div class="container">
-  <h1>Controle de Estoque - Peças de Computador</h1>
+<h1>Estoque de Peças de Computador</h1>
 
-  <div class="filtros">
-    <input type="text" id="pesquisa" placeholder="Pesquisar por nome" style="flex:1">
-    <select id="filtroCategoria">
-      <option value="Todas">Todas as categorias</option>
-      <option>Placa-mãe</option>
-      <option>Processador</option>
-      <option>Memória RAM</option>
-      <option>Armazenamento</option>
-      <option>Placa de vídeo</option>
-      <option>Outros</option>
-    </select>
-  </div>
-
-  <form id="formProduto">
-    <input type="text" id="nome" placeholder="Nome do produto" required>
-    <select id="categoria" required>
-      <option value="">Selecione a categoria</option>
-      <option>Placa-mãe</option>
-      <option>Processador</option>
-      <option>Memória RAM</option>
-      <option>Armazenamento</option>
-      <option>Placa de vídeo</option>
-      <option>Outros</option>
-    </select>
-    <button type="submit">Adicionar Produto</button>
-  </form>
-
-  <table>
-    <thead>
-      <tr>
-        <th>Produto</th>
-        <th>Categoria</th>
-        <th>Status</th>
-        <th>Ações</th>
-      </tr>
-    </thead>
-    <tbody id="listaProdutos"></tbody>
-  </table>
+<div class="filtros">
+  <input id="pesquisa" placeholder="Pesquisar produto" style="flex:1">
+  <select id="filtroCategoria">
+    <option value="Todas">Todas</option>
+    <option>Placa-mãe</option>
+    <option>Processador</option>
+    <option>Memória RAM</option>
+    <option>Armazenamento</option>
+    <option>Placa de vídeo</option>
+    <option>Outros</option>
+  </select>
 </div>
 
-<!-- FIREBASE -->
+<form id="formProduto">
+  <input id="nome" placeholder="Nome do produto" required>
+  <select id="categoria" required>
+    <option value="">Categoria</option>
+    <option>Placa-mãe</option>
+    <option>Processador</option>
+    <option>Memória RAM</option>
+    <option>Armazenamento</option>
+    <option>Placa de vídeo</option>
+    <option>Outros</option>
+  </select>
+  <button type="submit">Adicionar</button>
+</form>
+
+<table>
+<thead>
+<tr>
+  <th>Produto</th>
+  <th>Categoria</th>
+  <th>Status</th>
+  <th>Ações</th>
+</tr>
+</thead>
+<tbody id="lista"></tbody>
+</table>
+</div>
+
 <script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-  import {
-    getFirestore, collection, addDoc, getDocs,
-    deleteDoc, doc, updateDoc
-  } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import {
+  getFirestore, collection, addDoc,
+  deleteDoc, doc, updateDoc,
+  onSnapshot
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-  // 🔴 COLE SEU firebaseConfig AQUI
-  const firebaseConfig = {
-    apiKey: "AIzaSyDtmu5yKt5Kz8yxzTCCf5MfC2av1O5zL2Q",
-    authDomain: "lojavendas-ae418.firebaseapp.com",
-    projectId: "lojavendas-ae418",
-    storageBucket: "lojavendas-ae418.firebasestorage.app",
-    messagingSenderId: "241091939383",
-    appId: "1:241091939383:web:b676e35c3c8c7c45c183b2"
-  };
+const firebaseConfig = {
+  apiKey: "AIzaSyDtmu5yKt5Kz8yxzTCCf5MfC2av1O5zL2Q",
+  authDomain: "lojavendas-ae418.firebaseapp.com",
+  projectId: "lojavendas-ae418",
+  storageBucket: "lojavendas-ae418.firebasestorage.app",
+  messagingSenderId: "241091939383",
+  appId: "1:241091939383:web:b676e35c3c8c7c45c183b2"
+};
 
-  const app = initializeApp(firebaseConfig);
-  const db = getFirestore(app);
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
 
-  const form = document.getElementById("formProduto");
-  const lista = document.getElementById("listaProdutos");
-  const pesquisa = document.getElementById("pesquisa");
-  const filtroCategoria = document.getElementById("filtroCategoria");
+const lista = document.getElementById("lista");
+const form = document.getElementById("formProduto");
+const nome = document.getElementById("nome");
+const categoria = document.getElementById("categoria");
+const pesquisa = document.getElementById("pesquisa");
+const filtroCategoria = document.getElementById("filtroCategoria");
 
-  async function renderizar() {
-    lista.innerHTML = "";
-    const termo = pesquisa.value.toLowerCase();
-    const categoriaFiltro = filtroCategoria.value;
+let produtos = [];
 
-    const snapshot = await getDocs(collection(db, "produtos"));
-
-    snapshot.forEach(docSnap => {
-      const p = docSnap.data();
-      const id = docSnap.id;
-
-      if (
-        (termo && !p.nome.toLowerCase().includes(termo)) ||
-        (categoriaFiltro !== "Todas" && p.categoria !== categoriaFiltro)
-      ) return;
-
-      const tr = document.createElement("tr");
-      tr.innerHTML = `
-        <td>${p.nome}</td>
-        <td>${p.categoria}</td>
-        <td class="${p.vendido ? 'vendido' : 'nao-vendido'}">
-          ${p.vendido ? 'Vendido' : 'Disponível'}
-        </td>
-        <td>
-          <button onclick="alternarStatus('${id}', ${p.vendido})">
-            Alternar status
-          </button>
-          <button class="btn-remover" onclick="removerProduto('${id}')">
-            Remover
-          </button>
-        </td>
-      `;
-      lista.appendChild(tr);
-    });
-  }
-
-  form.addEventListener("submit", async e => {
-    e.preventDefault();
-    await addDoc(collection(db, "produtos"), {
-      nome: nome.value,
-      categoria: categoria.value,
-      vendido: false
-    });
-    form.reset();
-    renderizar();
-  });
-
-  window.alternarStatus = async (id, status) => {
-    await updateDoc(doc(db, "produtos", id), { vendido: !status });
-    renderizar();
-  };
-
-  window.removerProduto = async id => {
-    await deleteDoc(doc(db, "produtos", id));
-    renderizar();
-  };
-
-  pesquisa.addEventListener("input", renderizar);
-  filtroCategoria.addEventListener("change", renderizar);
-
+// 🔥 Atualização em tempo real
+onSnapshot(collection(db,"produtos"), snap=>{
+  produtos = snap.docs.map(d=>({ id:d.id, ...d.data() }));
   renderizar();
+});
+
+function renderizar(){
+  lista.innerHTML="";
+  const termo = pesquisa.value.toLowerCase();
+  const filtro = filtroCategoria.value;
+
+  produtos.forEach(p=>{
+    if(
+      (termo && !p.nome.toLowerCase().includes(termo)) ||
+      (filtro!=="Todas" && p.categoria!==filtro)
+    ) return;
+
+    const tr=document.createElement("tr");
+    tr.innerHTML=`
+      <td>${p.nome}</td>
+      <td>${p.categoria}</td>
+      <td class="${p.vendido?'vendido':'disponivel'}">
+        ${p.vendido?'Vendido':'Disponível'}
+      </td>
+      <td>
+        <button onclick="alterarStatus('${p.id}')">Alterar status</button>
+        <button class="btn-remover" onclick="removerProduto('${p.id}')">Remover</button>
+      </td>
+    `;
+    lista.appendChild(tr);
+  });
+}
+
+form.addEventListener("submit",async e=>{
+  e.preventDefault();
+  await addDoc(collection(db,"produtos"),{
+    nome:nome.value,
+    categoria:categoria.value,
+    vendido:false
+  });
+  form.reset();
+});
+
+// ✅ FUNÇÃO CORRETA (sem erro)
+window.alterarStatus = async id => {
+  const produto = produtos.find(p => p.id === id);
+  if(!produto) return;
+  await updateDoc(doc(db,"produtos",id),{
+    vendido: !produto.vendido
+  });
+};
+
+window.removerProduto = async id =>{
+  await deleteDoc(doc(db,"produtos",id));
+};
+
+pesquisa.addEventListener("input",renderizar);
+filtroCategoria.addEventListener("change",renderizar);
 </script>
 
 </body>
