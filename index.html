@@ -2,7 +2,8 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<title>Estoque de Peças</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Estoque Mobile</title>
 
 <style>
 :root{
@@ -17,96 +18,102 @@
 
 body{
   margin:0;
-  padding:12px;
+  padding:10px;
   background:radial-gradient(circle at top,#111827,#020617);
   font-family:Segoe UI,Arial;
   color:var(--text);
 }
 
 .container{
-  max-width:1100px;
+  max-width:100%;
   margin:auto;
-  background:linear-gradient(180deg,#0f172a,#020617);
-  padding:18px;
-  border-radius:14px;
 }
 
-h1{text-align:center;color:var(--secondary);}
+h1{
+  text-align:center;
+  color:var(--secondary);
+  font-size:1.4rem;
+}
 
 input,select,button{
-  padding:10px;
-  border-radius:8px;
+  width:100%;
+  padding:12px;
+  border-radius:10px;
   border:1px solid rgba(59,130,246,.3);
   background:#020617;
   color:var(--text);
+  font-size:1rem;
 }
 
 button{
-  cursor:pointer;
   background:linear-gradient(135deg,var(--primary),var(--secondary));
   color:#020617;
   font-weight:bold;
   border:none;
 }
 
-.filtros,form{
-  display:flex;
-  gap:10px;
-  flex-wrap:wrap;
+.filtros,form{display:grid;gap:10px;margin-bottom:12px;}
+
+.contadores{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:8px;
   margin-bottom:12px;
 }
 
-table{
-  width:100%;
-  border-collapse:collapse;
-  margin-top:10px;
-}
-
-th{
-  background:rgba(59,130,246,.15);
-  color:var(--secondary);
+.card{
+  background:linear-gradient(135deg,#020617,#0f172a);
+  border:1px solid rgba(59,130,246,.3);
+  border-radius:12px;
   padding:10px;
-  cursor:pointer;
-  user-select:none;
-}
-
-th:hover{background:rgba(59,130,246,.25);}
-
-td{
-  padding:10px;
-  border-bottom:1px solid rgba(255,255,255,.08);
   text-align:center;
+  font-size:.9rem;
+  font-weight:bold;
 }
 
-.vendido{color:var(--danger);font-weight:bold;}
-.disponivel{color:var(--success);font-weight:bold;}
+.card.total{color:#38bdf8;}
+.card.disponivel{color:#22c55e;}
+.card.vendido{color:#ef4444;}
 
-.btn-remover{
-  background:linear-gradient(135deg,#ef4444,#b91c1c);
-  color:#fff;
+.lista{display:grid;gap:10px;}
+
+.item{
+  background:#020617;
+  border:1px solid rgba(255,255,255,.1);
+  border-radius:12px;
+  padding:10px;
 }
 
-@media(max-width:600px){
-  table,thead,tbody,th,td,tr{display:block}
-  thead{display:none}
-  tr{
-    background:#020617;
-    margin-bottom:12px;
-    border-radius:12px;
-    padding:10px;
-  }
-  button{width:100%;margin-top:6px}
-}
+.status.disponivel{color:var(--success);font-weight:bold;}
+.status.vendido{color:var(--danger);font-weight:bold;}
+
+.botoes{display:grid;gap:6px;margin-top:6px;}
+.btn-remover{background:linear-gradient(135deg,#ef4444,#b91c1c);color:#fff;}
 </style>
 </head>
-
 <body>
 
 <div class="container">
-<h1>Estoque de Peças</h1>
+<h1>📦 Estoque Mobile</h1>
+
+<div class="contadores">
+  <div class="card total" onclick="setFiltro('todos')">Total<br><span id="total">0</span></div>
+  <div class="card disponivel" onclick="setFiltro('disponivel')">Disp.<br><span id="disponiveis">0</span></div>
+  <div class="card vendido" onclick="setFiltro('vendido')">Vend.<br><span id="vendidos">0</span></div>
+</div>
 
 <div class="filtros">
-  <input id="pesquisa" placeholder="Pesquisar produto" style="flex:1">
+  <input id="pesquisa" placeholder="Pesquisar produto">
+  <select id="filtroCategoria">
+    <option value="">Todas categorias</option>
+    <option>Placa-mãe</option>
+    <option>Processador</option>
+    <option>Memória RAM</option>
+    <option>Placa de vídeo</option>
+    <option>Fonte</option>
+    <option>Gabinete</option>
+    <option>Outros</option>
+  </select>
 </div>
 
 <form id="formProduto">
@@ -124,26 +131,12 @@ td{
   <button type="submit">Adicionar</button>
 </form>
 
-<table>
-<thead>
-<tr>
-  <th>Produto</th>
-  <th onclick="alternarCategoria()">Categoria</th>
-  <th onclick="alternarStatus()">Status</th>
-  <th>Ações</th>
-</tr>
-</thead>
-<tbody id="lista"></tbody>
-</table>
+<div class="lista" id="lista"></div>
 </div>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import {
-  getFirestore, collection, addDoc,
-  deleteDoc, doc, updateDoc,
-  onSnapshot
-} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { getFirestore, collection, addDoc, deleteDoc, doc, updateDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDtmu5yKt5Kz8yxzTCCf5MfC2av1O5zL2Q",
@@ -162,84 +155,73 @@ const form = document.getElementById("formProduto");
 const nome = document.getElementById("nome");
 const categoria = document.getElementById("categoria");
 const pesquisa = document.getElementById("pesquisa");
+const filtroCategoria = document.getElementById("filtroCategoria");
 
 let produtos = [];
 let filtroStatus = "todos";
-let filtroCategoriaAtivo = false;
 
-// 🔥 realtime
 onSnapshot(collection(db,"produtos"), snap=>{
   produtos = snap.docs.map(d=>({id:d.id,...d.data()}));
+  atualizarContadores();
   renderizar();
 });
+
+function atualizarContadores(){
+  total.textContent = produtos.length;
+  vendidos.textContent = produtos.filter(p=>p.vendido).length;
+  disponiveis.textContent = produtos.filter(p=>!p.vendido).length;
+}
 
 function renderizar(){
   lista.innerHTML="";
-  const termo = pesquisa.value.toLowerCase();
+  let dados=[...produtos];
 
-  produtos.forEach(p=>{
-    if(termo && !p.nome.toLowerCase().includes(termo)) return;
-    if(filtroStatus==="vendido" && !p.vendido) return;
-    if(filtroStatus==="disponivel" && p.vendido) return;
+  if(filtroStatus==="vendido") dados=dados.filter(p=>p.vendido);
+  if(filtroStatus==="disponivel") dados=dados.filter(p=>!p.vendido);
 
-    const tr=document.createElement("tr");
-    tr.innerHTML=`
-      <td>${p.nome}</td>
-      <td>${p.categoria}</td>
-      <td class="${p.vendido?'vendido':'disponivel'}">
+  if(pesquisa.value)
+    dados=dados.filter(p=>p.nome.toLowerCase().includes(pesquisa.value.toLowerCase()));
+
+  if(filtroCategoria.value)
+    dados=dados.filter(p=>p.categoria===filtroCategoria.value);
+
+  dados.forEach(p=>{
+    const div=document.createElement("div");
+    div.className="item";
+    div.innerHTML=`
+      <strong>${p.nome}</strong><br>
+      <small>${p.categoria}</small><br>
+      <span class="status ${p.vendido?'vendido':'disponivel'}">
         ${p.vendido?'Vendido':'Disponível'}
-      </td>
-      <td>
-        <button onclick="alterarStatus('${p.id}')">Status</button>
+      </span>
+      <div class="botoes">
+        <button onclick="mudarStatus('${p.id}')">Alterar status</button>
         <button class="btn-remover" onclick="removerProduto('${p.id}')">Remover</button>
-      </td>
+      </div>
     `;
-    lista.appendChild(tr);
+    lista.appendChild(div);
   });
 }
 
-// 🔄 clique no cabeçalho STATUS
-window.alternarStatus = ()=>{
-  filtroStatus =
-    filtroStatus==="todos" ? "disponivel" :
-    filtroStatus==="disponivel" ? "vendido" :
-    "todos";
-  renderizar();
-};
-
-// 🔄 clique no cabeçalho CATEGORIA
-window.alternarCategoria = ()=>{
-  filtroCategoriaAtivo = !filtroCategoriaAtivo;
-  produtos.sort((a,b)=>
-    filtroCategoriaAtivo
-      ? a.categoria.localeCompare(b.categoria)
-      : 0
-  );
-  renderizar();
-};
+window.setFiltro=t=>{filtroStatus=t;renderizar()};
 
 form.addEventListener("submit",async e=>{
   e.preventDefault();
-  await addDoc(collection(db,"produtos"),{
-    nome:nome.value,
-    categoria:categoria.value,
-    vendido:false
-  });
+  await addDoc(collection(db,"produtos"),{nome:nome.value,categoria:categoria.value,vendido:false});
   form.reset();
 });
 
-window.alterarStatus = async id=>{
-  const p = produtos.find(x=>x.id===id);
-  if(!p) return;
-  await updateDoc(doc(db,"produtos",id),{vendido:!p.vendido});
+window.mudarStatus=async id=>{
+  const p=produtos.find(x=>x.id===id);
+  if(p) await updateDoc(doc(db,"produtos",id),{vendido:!p.vendido});
 };
 
-window.removerProduto = async id=>{
+window.removerProduto=async id=>{
   await deleteDoc(doc(db,"produtos",id));
 };
 
 pesquisa.addEventListener("input",renderizar);
+filtroCategoria.addEventListener("change",renderizar);
 </script>
-
 </body>
 </html>
