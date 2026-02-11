@@ -638,6 +638,84 @@ export const bibliotecaProdutos = [
   { nome: "K-Mex 400W", categoria: "Fonte de Alimentação", marca: "K-Mex", linha: "Padrão", potencia: "400W" },
   { nome: "Knup 500W", categoria: "Fonte de Alimentação", marca: "Knup", linha: "Padrão", potencia: "500W" },
   { nome: "OnePower 500W", categoria: "Fonte de Alimentação", marca: "OnePower", linha: "Padrão", potencia: "500W" },
-  { nome: "OnePower 600W", categoria: "Fonte de Alimentação", marca: "OnePower", linha: "Padrão", potencia: "600W" }
+  { nome: "OnePower 600W", categoria: "Fonte de Alimentação", marca: "OnePower", linha: "Padrão", potencia: "600W" },
+   
+ { nome: "RTX 4060", categoria: "Placa de Vídeo", marca: "ASUS ROG Strix", linha: "RTX 40", modelo: "4060" },
+  { nome: "RTX 4070 Super", categoria: "Placa de Vídeo", marca: "MSI Suprim X", linha: "RTX 40", modelo: "4070 Super" },
+  { nome: "RTX 4080", categoria: "Placa de Vídeo", marca: "Gigabyte Aorus Master", linha: "RTX 40", modelo: "4080" },
+  { nome: "RTX 4090", categoria: "Placa de Vídeo", marca: "Galax Hall of Fame (HOF)", linha: "RTX 40", modelo: "4090" },
+  { nome: "RTX 5070", categoria: "Placa de Vídeo", marca: "Galax SG/EX", linha: "RTX 50", modelo: "5070" },
+  { nome: "RTX 5080", categoria: "Placa de Vídeo", marca: "Gainward Ghost", linha: "RTX 50", modelo: "5080" },
+  { nome: "RTX 5090", categoria: "Placa de Vídeo", marca: "Palit Dual", linha: "RTX 50", modelo: "5090" },
 
-   ];
+  // Série RTX 20/30 (Anterior)
+  { nome: "RTX 2060", categoria: "Placa de Vídeo", marca: "ASUS TUF Gaming", linha: "RTX 20", modelo: "2060" },
+  { nome: "RTX 3060", categoria: "Placa de Vídeo", marca: "MSI Ventus 3X", linha: "RTX 30", modelo: "3060" },
+  { nome: "RTX 3060 Ti", categoria: "Placa de Vídeo", marca: "Gigabyte Gaming OC", linha: "RTX 30", modelo: "3060 Ti" },
+  { nome: "RTX 3070", categoria: "Placa de Vídeo", marca: "EVGA FTW3", linha: "RTX 30", modelo: "3070" },
+  { nome: "RTX 3080", categoria: "Placa de Vídeo", marca: "ASUS TUF Gaming", linha: "RTX 30", modelo: "3080" },
+
+  // Série GTX 10/16 (Entrada e clássicas)
+  { nome: "GTX 1050 Ti", categoria: "Placa de Vídeo", marca: "PCYes Graffiti", linha: "GTX 10", modelo: "1050 Ti" },
+  { nome: "GTX 1060", categoria: "Placa de Vídeo", marca: "Zotac Mini", linha: "GTX 10", modelo: "1060" },
+  { nome: "GTX 1080 Ti", categoria: "Placa de Vídeo", marca: "Galax Click OC", linha: "GTX 10", modelo: "1080 Ti" },
+  { nome: "GTX 1650", categoria: "Placa de Vídeo", marca: "ASUS Phoenix", linha: "GTX 16", modelo: "1650" },
+  { nome: "GTX 1660 Super", categoria: "Placa de Vídeo", marca: "ASUS Phoenix", linha: "GTX 16", modelo: "1660 Super" },
+
+  // ===== AMD Radeon =====
+  // Série RX 7000/8000 (Atual)
+  { nome: "RX 7600", categoria: "Placa de Vídeo", marca: "Sapphire Nitro+", linha: "RX 7000", modelo: "7600" },
+  { nome: "RX 7700 XT", categoria: "Placa de Vídeo", marca: "PowerColor Red Devil", linha: "RX 7000", modelo: "7700 XT" },
+  { nome: "RX 7800 XT", categoria: "Placa de Vídeo", marca: "ASUS ROG Strix", linha: "RX 7000", modelo: "7800 XT" },
+  { nome: "RX 7900 XTX", categoria: "Placa de Vídeo", marca: "Sapphire Nitro+", linha: "RX 7000", modelo: "7900 XTX" },
+  { nome: "RX 8700 XT", categoria: "Placa de Vídeo", marca: "ASRock Challenger", linha: "RX 8000", modelo: "8700 XT" },
+  { nome: "RX 8800 XT", categoria: "Placa de Vídeo", marca: "XFX Speedster", linha: "RX 8000", modelo: "8800 XT" },
+
+  // Série RX 5000/6000 (Anterior)
+  { nome: "RX 5500 XT", categoria: "Placa de Vídeo", marca: "MSI Mech", linha: "RX 5000", modelo: "5500 XT" },
+  { nome: "RX 5700 XT", categoria: "Placa de Vídeo", marca: "Gigabyte Eagle", linha: "RX 5000", modelo: "5700 XT" },
+  { nome: "RX 6600", categoria: "Placa de Vídeo", marca: "ASUS Dual", linha: "RX 6000", modelo: "6600" },
+  { nome: "RX 6600 XT", categoria: "Placa de Vídeo", marca: "MSI Mech", linha: "RX 6000", modelo: "6600 XT" },
+  { nome: "RX 6750 XT", categoria: "Placa de Vídeo", marca: "Gigabyte Eagle", linha: "RX 6000", modelo: "6750 XT" },
+
+  // Série RX 400/500 (China / AliExpress)
+  { nome: "RX 470", categoria: "Placa de Vídeo", marca: "51Risc", linha: "RX 400", modelo: "470" },
+  { nome: "RX 480", categoria: "Placa de Vídeo", marca: "Peladn", linha: "RX 400", modelo: "480" },
+  { nome: "RX 570", categoria: "Placa de Vídeo", marca: "MLLSE", linha: "RX 500", modelo: "570" },
+  { nome: "RX 580", categoria: "Placa de Vídeo", marca: "Soyo", linha: "RX 500", modelo: "580" },
+  { nome: "RX 590", categoria: "Placa de Vídeo", marca: "51Risc", linha: "RX 500", modelo: "590" },
+
+  // ===== INTEL Arc =====
+  { nome: "Arc A380", categoria: "Placa de Vídeo", marca: "Sparkle", linha: "Arc", modelo: "A380" },
+  { nome: "Arc A580", categoria: "Placa de Vídeo", marca: "Gunnir", linha: "Arc", modelo: "A580" },
+  { nome: "Arc A750", categoria: "Placa de Vídeo", marca: "Acer Predator", linha: "Arc", modelo: "A750" },
+  { nome: "Arc A770", categoria: "Placa de Vídeo", marca: "ASRock Phantom Gaming", linha: "Arc", modelo: "A770" },
+  { nome: "B580", categoria: "Placa de Vídeo", marca: "Sparkle", linha: "Battlemage", modelo: "B580" },
+
+  // ===== MARCAS NACIONAIS / WHITE LABEL =====
+  { nome: "Danuri", categoria: "Placa de Vídeo", marca: "Pichau", linha: "RTX / GTX", modelo: "Danuri" },
+  { nome: "Aldebaran", categoria: "Placa de Vídeo", marca: "Pichau", linha: "RTX / GTX", modelo: "Aldebaran" },
+  { nome: "RTX Entrada", categoria: "Placa de Vídeo", marca: "Mancer", linha: "RTX / GTX", modelo: "Entrada" },
+  { nome: "GTX Entrada", categoria: "Placa de Vídeo", marca: "Mancer", linha: "RTX / GTX", modelo: "Entrada" },
+  { nome: "Rise Mode Custo-Benefício", categoria: "Placa de Vídeo", marca: "Rise Mode", linha: "Custo-Benefício", modelo: "Padrão" },
+  { nome: "Graffiti", categoria: "Placa de Vídeo", marca: "PCYes", linha: "Design Brasileiro", modelo: "Graffiti" },
+
+    { nome: "RTX 5090", categoria: "Placa de Vídeo", marca: "ASUS ROG Strix LC", linha: "RTX 50", modelo: "5090 (32GB GDDR7)" },
+  { nome: "RTX 5080", categoria: "Placa de Vídeo", marca: "MSI Suprim X", linha: "RTX 50", modelo: "5080 (16GB GDDR7)" },
+  { nome: "RTX 5070 Ti", categoria: "Placa de Vídeo", marca: "Gigabyte Aorus Master", linha: "RTX 50", modelo: "5070 Ti (16GB GDDR7)" },
+  { nome: "RTX 5070", categoria: "Placa de Vídeo", marca: "Galax HOF", linha: "RTX 50", modelo: "5070 (12GB GDDR7)" },
+  { nome: "RTX 5060", categoria: "Placa de Vídeo", marca: "Palit GameRock", linha: "RTX 50", modelo: "5060 (Intermediária)" },
+  { nome: "RTX 5060 Ti", categoria: "Placa de Vídeo", marca: "Gainward GameRock", linha: "RTX 50", modelo: "5060 Ti (Intermediária)" },
+
+  // ===== NVIDIA RTX 40 SUPER (Ainda populares) =====
+  { nome: "RTX 4080 SUPER", categoria: "Placa de Vídeo", marca: "ASUS TUF Gaming OC", linha: "RTX 40 SUPER", modelo: "4080 SUPER" },
+  { nome: "RTX 4070 Ti SUPER", categoria: "Placa de Vídeo", marca: "MSI Gaming Trio", linha: "RTX 40 SUPER", modelo: "4070 Ti SUPER (16GB VRAM)" },
+  { nome: "RTX 4070 SUPER", categoria: "Placa de Vídeo", marca: "Gigabyte Aorus Master", linha: "RTX 40 SUPER", modelo: "4070 SUPER" },
+
+  // ===== Marcas Premium e Grife (Atual RTX 50 e 40 SUPER) =====
+  { nome: "RTX 5090 HOF", categoria: "Placa de Vídeo", marca: "Galax HOF", linha: "RTX 50", modelo: "5090 (Hall of Fame)" },
+  { nome: "RTX 5070 SG", categoria: "Placa de Vídeo", marca: "Galax SG", linha: "RTX 50", modelo: "5070 (Serious Gaming)" },
+  { nome: "RTX 5090 AMP Extreme AIRO", categoria: "Placa de Vídeo", marca: "Zotac", linha: "RTX 50", modelo: "5090" },
+  { nome: "RTX 5080 GameRock", categoria: "Placa de Vídeo", marca: "Palit", linha: "RTX 50", modelo: "5080" },
+  { nome: "RTX 5070 GameRock", categoria: "Placa de Vídeo", marca: "Gainward", linha: "RTX 50", modelo: "5070" }
+];
