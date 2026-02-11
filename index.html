@@ -24,10 +24,7 @@ body{
   color:var(--text);
 }
 
-.container{
-  max-width:100%;
-  margin:auto;
-}
+.container{max-width:100%;margin:auto;}
 
 h1{
   text-align:center;
@@ -88,7 +85,33 @@ button{
 .status.vendido{color:var(--danger);font-weight:bold;}
 
 .botoes{display:grid;gap:6px;margin-top:6px;}
-.btn-remover{background:linear-gradient(135deg,#ef4444,#b91c1c);color:#fff;}
+.btn-remover{
+  background:linear-gradient(135deg,#ef4444,#b91c1c);
+  color:#fff;
+}
+
+.sugestoes{
+  position:absolute;
+  top:100%;
+  left:0;
+  right:0;
+  background:#0f172a;
+  border:1px solid rgba(59,130,246,.3);
+  border-radius:8px;
+  max-height:150px;
+  overflow-y:auto;
+  z-index:999;
+}
+
+.sugestao-item{
+  padding:10px;
+  cursor:pointer;
+  border-bottom:1px solid rgba(255,255,255,.05);
+}
+
+.sugestao-item:hover{
+  background:#1e293b;
+}
 </style>
 </head>
 <body>
@@ -97,9 +120,15 @@ button{
 <h1>📦 Estoque Mobile</h1>
 
 <div class="contadores">
-  <div class="card total" onclick="setFiltro('todos')">Total<br><span id="total">0</span></div>
-  <div class="card disponivel" onclick="setFiltro('disponivel')">Disp.<br><span id="disponiveis">0</span></div>
-  <div class="card vendido" onclick="setFiltro('vendido')">Vend.<br><span id="vendidos">0</span></div>
+  <div class="card total" onclick="setFiltro('todos')">
+    Total<br><span id="total">0</span>
+  </div>
+  <div class="card disponivel" onclick="setFiltro('disponivel')">
+    Disp.<br><span id="disponiveis">0</span>
+  </div>
+  <div class="card vendido" onclick="setFiltro('vendido')">
+    Vend.<br><span id="vendidos">0</span>
+  </div>
 </div>
 
 <div class="filtros">
@@ -109,15 +138,15 @@ button{
     <option>Placa-mãe</option>
     <option>Processador</option>
     <option>Memória RAM</option>
-    <option>Teclado</option>
-    <option>Mouse</option>
-   <option>Kit</option>
+    <option>Kit</option>
     <option>Resfriadores</option>
     <option>PC</option>
-   <option>Armazenameto</option>
+    <option>Teclado</option>
+    <option>Mouse</option>
     <option>Monitor</option>
-     <option>Headset</option>
-    <option>Placa De Vídeo</option>
+    <option>Headset</option>
+    <option>Armazenamento</option>
+    <option>Placa de Vídeo</option>
     <option>Fonte</option>
     <option>Gabinete</option>
     <option>Outros</option>
@@ -125,26 +154,30 @@ button{
 </div>
 
 <form id="formProduto">
-  <input id="nome" placeholder="Nome do produto" required>
+  <div style="position:relative;">
+    <input id="nome" placeholder="Nome do produto" autocomplete="off" required>
+    <div id="sugestoes" class="sugestoes"></div>
+  </div>
+
   <select id="categoria" required>
     <option value="">Categoria</option>
     <option>Placa-mãe</option>
     <option>Processador</option>
     <option>Memória RAM</option>
-      <option>Kit</option>
+    <option>Kit</option>
     <option>Resfriadores</option>
     <option>PC</option>
-     <option>Teclado</option>
-     <option>Mouse</option>
-     <option>Kit</option>
+    <option>Teclado</option>
+    <option>Mouse</option>
     <option>Monitor</option>
-     <option>Headset</option>
-    <option>Armazenameto</option>
+    <option>Headset</option>
+    <option>Armazenamento</option>
     <option>Placa de Vídeo</option>
     <option>Fonte</option>
     <option>Gabinete</option>
     <option>Outros</option>
   </select>
+
   <button type="submit">Adicionar</button>
 </form>
 
@@ -152,6 +185,8 @@ button{
 </div>
 
 <script type="module">
+
+import { bibliotecaProdutos } from "./biblioteca.js";
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import { getFirestore, collection, addDoc, deleteDoc, doc, updateDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
@@ -173,6 +208,7 @@ const nome = document.getElementById("nome");
 const categoria = document.getElementById("categoria");
 const pesquisa = document.getElementById("pesquisa");
 const filtroCategoria = document.getElementById("filtroCategoria");
+const sugestoes = document.getElementById("sugestoes");
 
 let produtos = [];
 let filtroStatus = "todos";
@@ -224,8 +260,13 @@ window.setFiltro=t=>{filtroStatus=t;renderizar()};
 
 form.addEventListener("submit",async e=>{
   e.preventDefault();
-  await addDoc(collection(db,"produtos"),{nome:nome.value,categoria:categoria.value,vendido:false});
+  await addDoc(collection(db,"produtos"),{
+    nome:nome.value,
+    categoria:categoria.value,
+    vendido:false
+  });
   form.reset();
+  sugestoes.innerHTML="";
 });
 
 window.mudarStatus=async id=>{
@@ -239,9 +280,51 @@ window.removerProduto=async id=>{
 
 pesquisa.addEventListener("input",renderizar);
 filtroCategoria.addEventListener("change",renderizar);
+
+/* AUTOCOMPLETE */
+
+nome.addEventListener("input", ()=>{
+
+  const valor = nome.value.toLowerCase();
+  sugestoes.innerHTML="";
+  if(!valor) return;
+
+  const firebaseProdutos = produtos.map(p=>({
+    nome:p.nome,
+    categoria:p.categoria
+  }));
+
+  const todos = [...bibliotecaProdutos, ...firebaseProdutos];
+
+  const unicos = todos.filter((item,index,self)=>
+    index===self.findIndex(p=>p.nome===item.nome)
+  );
+
+  const filtrados = unicos.filter(p=>
+    p.nome.toLowerCase().includes(valor)
+  );
+
+  filtrados.slice(0,6).forEach(prod=>{
+    const div=document.createElement("div");
+    div.className="sugestao-item";
+    div.innerHTML=`<strong>${prod.nome}</strong><br><small>${prod.categoria}</small>`;
+
+    div.onclick=()=>{
+      nome.value=prod.nome;
+      categoria.value=prod.categoria;
+      sugestoes.innerHTML="";
+    };
+
+    sugestoes.appendChild(div);
+  });
+});
+
+document.addEventListener("click",(e)=>{
+  if(!e.target.closest("#nome")){
+    sugestoes.innerHTML="";
+  }
+});
+
 </script>
 </body>
 </html>
-
-
-
