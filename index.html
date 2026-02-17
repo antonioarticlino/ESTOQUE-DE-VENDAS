@@ -3,328 +3,478 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Estoque Mobile</title>
+<title>Catálogo</title>
 
 <style>
-:root{
-  --primary:#3b82f6;
-  --secondary:#22d3ee;
-  --success:#22c55e;
-  --danger:#ef4444;
-  --bg:#020617;
-  --card:#0f172a;
-  --text:#e5e7eb;
+  /* ===== MENU LATERAL ===== */
+
+.menu-lateral {
+  position: fixed;
+  top: 0;
+  left: 0;
+  transform: translateX(-100%);
+  width: 110px;
+  height: 100%;
+  background: #0f172a;
+  box-shadow: 5px 0 20px rgba(0,0,0,0.5);
+  padding: 60px;
+  transition: transform 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  z-index: 1001;
 }
 
-body{
-  margin:0;
-  padding:10px;
-  background:radial-gradient(circle at top,#111827,#020617);
-  font-family:Segoe UI,Arial;
-  color:var(--text);
+.menu-lateral.ativo {
+  transform: translateX(0);
 }
 
-.container{max-width:100%;margin:auto;}
 
-h1{
-  text-align:center;
-  color:var(--secondary);
-  font-size:1.4rem;
+.menu-lateral a {
+  color: white;
+  text-decoration: none;
+  font-size: 16px;
+  padding: 10px;
+  border-radius: 6px;
+  transition: 0.3s;
 }
 
-input,select,button{
-  width:100%;
-  padding:12px;
-  border-radius:10px;
-  border:1px solid rgba(59,130,246,.3);
-  background:#020617;
-  color:var(--text);
-  font-size:1rem;
+.menu-lateral a:hover {
+  background: #1e293b;
 }
 
-button{
-  background:linear-gradient(135deg,var(--primary),var(--secondary));
-  color:#020617;
-  font-weight:bold;
-  border:none;
+.menu-lateral.ativo {
+  left: 0;
 }
 
-.filtros,form{display:grid;gap:10px;margin-bottom:12px;}
-
-.contadores{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:8px;
-  margin-bottom:12px;
+.fechar-menu {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 20px;
+  align-self: flex-end;
+  cursor: pointer;
 }
 
-.card{
-  background:linear-gradient(135deg,#020617,#0f172a);
-  border:1px solid rgba(59,130,246,.3);
-  border-radius:12px;
-  padding:10px;
-  text-align:center;
-  font-size:.9rem;
-  font-weight:bold;
+/* Overlay */
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  opacity: 0;
+  visibility: hidden;
+  transition: 0.3s;
+  z-index: 1000;
 }
 
-.card.total{color:#38bdf8;}
-.card.disponivel{color:#22c55e;}
-.card.vendido{color:#ef4444;}
-
-.lista{display:grid;gap:10px;}
-
-.item{
-  background:#020617;
-  border:1px solid rgba(255,255,255,.1);
-  border-radius:12px;
-  padding:10px;
+.overlay.ativo {
+  opacity: 1;
+  visibility: visible;
 }
 
-.status.disponivel{color:var(--success);font-weight:bold;}
-.status.vendido{color:var(--danger);font-weight:bold;}
 
-.botoes{display:grid;gap:6px;margin-top:6px;}
-.btn-remover{
-  background:linear-gradient(135deg,#ef4444,#b91c1c);
-  color:#fff;
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  background: #0f172a;
+  color: white;
 }
 
-.sugestoes{
-  position:absolute;
-  top:100%;
-  left:0;
-  right:0;
-  background:#0f172a;
-  border:1px solid rgba(59,130,246,.3);
-  border-radius:8px;
-  max-height:150px;
-  overflow-y:auto;
-  z-index:999;
+/* ===== HEADER MODERNO ===== */
+
+.topo {
+  background: #1e293b;
+  padding: 15px 25px;
+  box-shadow: 0 0 20px rgba(0,0,0,0.5);
 }
 
-.sugestao-item{
-  padding:10px;
-  cursor:pointer;
-  border-bottom:1px solid rgba(255,255,255,.05);
+.topo-linha {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+}
+.menu-icon {
+  width: 30px;
+  height: 24px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 1100;
 }
 
-.sugestao-item:hover{
-  background:#1e293b;
+.menu-icon span {
+  position: absolute;
+  width: 100%;
+  height: 3px;
+  background: white;
+  border-radius: 2px;
+  transition: all 0.3s ease;
 }
+
+/* posição inicial */
+.menu-icon span:nth-child(1) {
+  transform: translateY(-8px);
+}
+
+.menu-icon span:nth-child(2) {
+  transform: translateY(0);
+}
+
+.menu-icon span:nth-child(3) {
+  transform: translateY(8px);
+}
+
+/* ===== quando ativo ===== */
+
+.menu-icon.ativo span:nth-child(1) {
+  transform: rotate(45deg);
+}
+
+.menu-icon.ativo span:nth-child(2) {
+  opacity: 0;
+}
+
+.menu-icon.ativo span:nth-child(3) {
+  transform: rotate(-45deg);
+}
+
+
+
+.logo img {
+  height: 145px;
+  width: auto;
+  object-fit: contain;
+}
+
+
+.carrinho {
+  position: relative;
+  font-size: 22px;
+  cursor: pointer;
+}
+
+.badge {
+  position: absolute;
+  top: -8px;
+  right: -10px;
+  background: red;
+  color: white;
+  border-radius: 50%;
+  padding: 3px 7px;
+  font-size: 12px;
+}
+
+.topo-pesquisa {
+  margin-top: 15px;
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.topo-pesquisa input,
+.topo-pesquisa select {
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid #334155;
+  background: #0f172a;
+  color: white;
+}
+
+.topo-pesquisa input {
+  flex: 1;
+}
+
+.topo-pesquisa input:focus,
+.topo-pesquisa select:focus {
+  outline: none;
+  border: 1px solid #3b82f6;
+}
+
+@media (max-width: 600px) {
+  .topo-pesquisa {
+    flex-direction: column;
+  }
+}
+
+/* ===== GRID PRODUTOS ===== */
+
+#produtos {
+  padding: 30px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 25px;
+}
+
+/* ===== CARD ===== */
+
+.card {
+  background: #1e293b;
+  padding: 15px;
+  border-radius: 12px;
+  box-shadow: 0 0 20px rgba(0,0,0,0.4);
+  transition: 0.3s;
+  display: flex;
+  flex-direction: column;
+}
+
+.card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 0 25px rgba(59,130,246,0.6);
+}
+
+.card img {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+.card h3 {
+  margin: 12px 0 5px 0;
+  font-size: 18px;
+}
+
+.card p {
+  font-size: 14px;
+  color: #cbd5e1;
+}
+
+.preco {
+  font-size: 18px;
+  font-weight: bold;
+  margin-top: 10px;
+  color: #3b82f6;
+}
+
+/* ===== BOTÃO WHATSAPP ===== */
+
+.btn-whatsapp {
+  margin-top: auto;
+  padding: 12px;
+  background: #22c55e;
+  text-align: center;
+  border-radius: 8px;
+  text-decoration: none;
+  color: white;
+  font-weight: bold;
+  transition: 0.3s;
+}
+
+.btn-whatsapp:hover {
+  background: #16a34a;
+  transform: scale(1.03);
+}
+
+/* ===== GALERIA ===== */
+
+.imagens-container {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+}
+
+.imagens-container img {
+  width: 150px;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.imagens-container img:hover {
+  transform: scale(1.05);
+}
+
 </style>
 </head>
+
 <body>
 
-<div class="container">
-<h1>📦 Estoque Mobile</h1>
+<!-- ===== HEADER ===== -->
 
-<div class="contadores">
-  <div class="card total" onclick="setFiltro('todos')">
-    Total<br><span id="total">0</span>
+<header class="topo">
+
+  <div class="topo-linha">
+<div class="menu-icon" onclick="toggleMenu()">
+  <span></span>
+  <span></span>
+  <span></span>
+</div>
+
+
+
+    <div class="logo">
+      <img src="ChatGPT Image 16 de fev. de 2026, 21_29_13.png" alt="Minha Loja">
+    </div>
+
+    <div class="carrinho" onclick="abrirCarrinho()">
+      🛒
+      <span id="contadorCarrinho" class="badge">0</span>
+    </div>
   </div>
-  <div class="card disponivel" onclick="setFiltro('disponivel')">
-    Disp.<br><span id="disponiveis">0</span>
+
+  <div class="topo-pesquisa">
+    <input type="text" id="pesquisa" placeholder="Buscar produtos...">
+    <select id="filtroCategoria">
+      <option value="">Todas categorias</option>
+    </select>
   </div>
-  <div class="card vendido" onclick="setFiltro('vendido')">
-    Vend.<br><span id="vendidos">0</span>
+
+</header>
+
+<!-- ===== MENU LATERAL ===== -->
+
+<div id="menuLateral" class="menu-lateral">
+  
+
+  <a href="#">Início</a>
+  <a href="#">Categorias</a>
+  <a href="#">Promoções</a>
+  <a href="#">Contato</a>
+</div>
+
+<div id="overlay" class="overlay" onclick="fecharMenu()"></div>
+
+
+<!-- ===== PRODUTOS ===== -->
+
+<div id="produtos"></div>
+
+<!-- ===== MODAL IMAGEM ===== -->
+
+<div id="modalImagem" style="
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.9);
+  justify-content:center;
+  align-items:center;
+  z-index:999;
+">
+
+  <span id="fecharModal" style="
+    position:absolute;
+    top:20px;
+    right:30px;
+    font-size:30px;
+    cursor:pointer;
+  ">✕</span>
+
+  <span id="btnAnterior" style="
+    position:absolute;
+    left:30px;
+    font-size:40px;
+    cursor:pointer;
+  ">❮</span>
+
+  <img id="imagemExpandida" style="
+    max-width:80%;
+    max-height:80%;
+    border-radius:12px;
+  ">
+
+  <span id="btnProximo" style="
+    position:absolute;
+    right:30px;
+    font-size:40px;
+    cursor:pointer;
+  ">❯</span>
+
+</div>
+
+<!-- ===== MODAL CARRINHO ===== -->
+
+<div id="modalCarrinho" style="
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.7);
+  justify-content:center;
+  align-items:center;
+  z-index:9999;
+">
+
+  <div style="
+    background:#1e293b;
+    width:400px;
+    max-height:80%;
+    overflow:auto;
+    padding:20px;
+    border-radius:12px;
+    position:relative;
+  ">
+
+    <button onclick="fecharCarrinho()" style="
+      position:absolute;
+      top:10px;
+      right:10px;
+      background:transparent;
+      border:none;
+      color:white;
+      font-size:20px;
+      cursor:pointer;
+    ">✖</button>
+
+    <h3>Seu Carrinho</h3>
+    <div id="itensCarrinho"></div>
+    <h4 id="totalCarrinho"></h4>
+
+    <button onclick="finalizarCompra()" style="
+      width:100%;
+      padding:12px;
+      background:#22c55e;
+      border:none;
+      border-radius:8px;
+      color:white;
+      font-weight:bold;
+      cursor:pointer;">
+      Finalizar pelo WhatsApp
+    </button>
+
   </div>
 </div>
 
-<div class="filtros">
-  <input id="pesquisa" placeholder="Pesquisar produto">
-  <select id="filtroCategoria">
-    <option value="">Todas categorias</option>
-    <option>Placa-mãe</option>
-    <option>Processador</option>
-    <option>Memória RAM</option>
-    <option>Kit</option>
-    <option>Resfriadores</option>
-    <option>PC</option>
-    <option>Teclado</option>
-    <option>Mouse</option>
-    <option>Monitor</option>
-    <option>Headset</option>
-    <option>Armazenamento</option>
-    <option>Placa de Vídeo</option>
-    <option>Fonte</option>
-    <option>Gabinete</option>
-    <option>Outros</option>
-  </select>
-</div>
+<script type="module" src="cliente.js"></script>
 
-<form id="formProduto">
-  <div style="position:relative;">
-    <input id="nome" placeholder="Nome do produto" autocomplete="off" required>
-    <div id="sugestoes" class="sugestoes"></div>
-  </div>
-
-  <select id="categoria" required>
-    <option value="">Categoria</option>
-    <option>Placa-mãe</option>
-    <option>Processador</option>
-    <option>Memória RAM</option>
-    <option>Kit</option>
-    <option>Resfriadores</option>
-    <option>PC</option>
-    <option>Teclado</option>
-    <option>Mouse</option>
-    <option>Monitor</option>
-    <option>Headset</option>
-    <option>Armazenamento</option>
-    <option>Placa de Vídeo</option>
-    <option>Fonte</option>
-    <option>Gabinete</option>
-    <option>Outros</option>
-  </select>
-
-  <button type="submit">Adicionar</button>
-</form>
-
-<div class="lista" id="lista"></div>
-</div>
-
-<script type="module">
-
-import { bibliotecaProdutos } from "./biblioteca.js";
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getFirestore, collection, addDoc, deleteDoc, doc, updateDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-
-const firebaseConfig = {
-  apiKey: "AIzaSyDtmu5yKt5Kz8yxzTCCf5MfC2av1O5zL2Q",
-  authDomain: "lojavendas-ae418.firebaseapp.com",
-  projectId: "lojavendas-ae418",
-  storageBucket: "lojavendas-ae418.firebasestorage.app",
-  messagingSenderId: "241091939383",
-  appId: "1:241091939383:web:b676e35c3c8c7c45c183b2"
-};
-
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-
-const lista = document.getElementById("lista");
-const form = document.getElementById("formProduto");
-const nome = document.getElementById("nome");
-const categoria = document.getElementById("categoria");
-const pesquisa = document.getElementById("pesquisa");
-const filtroCategoria = document.getElementById("filtroCategoria");
-const sugestoes = document.getElementById("sugestoes");
-
-let produtos = [];
-let filtroStatus = "todos";
-
-onSnapshot(collection(db,"produtos"), snap=>{
-  produtos = snap.docs.map(d=>({id:d.id,...d.data()}));
-  atualizarContadores();
-  renderizar();
-});
-
-function atualizarContadores(){
-  total.textContent = produtos.length;
-  vendidos.textContent = produtos.filter(p=>p.vendido).length;
-  disponiveis.textContent = produtos.filter(p=>!p.vendido).length;
-}
-
-function renderizar(){
-  lista.innerHTML="";
-  let dados=[...produtos];
-
-  if(filtroStatus==="vendido") dados=dados.filter(p=>p.vendido);
-  if(filtroStatus==="disponivel") dados=dados.filter(p=>!p.vendido);
-
-  if(pesquisa.value)
-    dados=dados.filter(p=>p.nome.toLowerCase().includes(pesquisa.value.toLowerCase()));
-
-  if(filtroCategoria.value)
-    dados=dados.filter(p=>p.categoria===filtroCategoria.value);
-
-  dados.forEach(p=>{
-    const div=document.createElement("div");
-    div.className="item";
-    div.innerHTML=`
-      <strong>${p.nome}</strong><br>
-      <small>${p.categoria}</small><br>
-      <span class="status ${p.vendido?'vendido':'disponivel'}">
-        ${p.vendido?'Vendido':'Disponível'}
-      </span>
-      <div class="botoes">
-        <button onclick="mudarStatus('${p.id}')">Alterar status</button>
-        <button class="btn-remover" onclick="removerProduto('${p.id}')">Remover</button>
-      </div>
-    `;
-    lista.appendChild(div);
-  });
-}
-
-window.setFiltro=t=>{filtroStatus=t;renderizar()};
-
-form.addEventListener("submit",async e=>{
-  e.preventDefault();
-  await addDoc(collection(db,"produtos"),{
-    nome:nome.value,
-    categoria:categoria.value,
-    vendido:false
-  });
-  form.reset();
-  sugestoes.innerHTML="";
-});
-
-window.mudarStatus=async id=>{
-  const p=produtos.find(x=>x.id===id);
-  if(p) await updateDoc(doc(db,"produtos",id),{vendido:!p.vendido});
-};
-
-window.removerProduto=async id=>{
-  await deleteDoc(doc(db,"produtos",id));
-};
-
-pesquisa.addEventListener("input",renderizar);
-filtroCategoria.addEventListener("change",renderizar);
-
-/* AUTOCOMPLETE */
-
-nome.addEventListener("input", ()=>{
-
-  const valor = nome.value.toLowerCase();
-  sugestoes.innerHTML="";
-  if(!valor) return;
-
-  const firebaseProdutos = produtos.map(p=>({
-    nome:p.nome,
-    categoria:p.categoria
-  }));
-
-  const todos = [...bibliotecaProdutos, ...firebaseProdutos];
-
-  const unicos = todos.filter((item,index,self)=>
-    index===self.findIndex(p=>p.nome===item.nome)
-  );
-
-  const filtrados = unicos.filter(p=>
-    p.nome.toLowerCase().includes(valor)
-  );
-
-  filtrados.slice(0,6).forEach(prod=>{
-    const div=document.createElement("div");
-    div.className="sugestao-item";
-    div.innerHTML=`<strong>${prod.nome}</strong><br><small>${prod.categoria}</small>`;
-
-    div.onclick=()=>{
-      nome.value=prod.nome;
-      categoria.value=prod.categoria;
-      sugestoes.innerHTML="";
-    };
-
-    sugestoes.appendChild(div);
-  });
-});
-
-document.addEventListener("click",(e)=>{
-  if(!e.target.closest("#nome")){
-    sugestoes.innerHTML="";
-  }
-});
-
-</script>
 </body>
 </html>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+  const menu = document.getElementById("menuLateral");
+  const overlay = document.getElementById("overlay");
+  const menuIcon = document.querySelector(".menu-icon");
+
+  window.toggleMenu = function () {
+    menu.classList.toggle("ativo");
+    overlay.classList.toggle("ativo");
+    menuIcon.classList.toggle("ativo");
+
+    if (menu.classList.contains("ativo")) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "auto";
+    }
+  };
+
+  window.fecharMenu = function () {
+    menu.classList.remove("ativo");
+    overlay.classList.remove("ativo");
+    menuIcon.classList.remove("ativo");
+    document.body.style.overflow = "auto";
+  };
+
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape") {
+      window.fecharMenu();
+    }
+  });
+
+});
+</script>
